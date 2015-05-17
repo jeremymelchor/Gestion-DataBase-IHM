@@ -2,33 +2,42 @@
 <body ng-controller='MoreInfoCTRL'>
 
 
+<div class="jumbotron">
+  <p ng-if="!currentUser.$edit">Nom : {{currentUser.name}}</p>
 
-<span ng-if="!currentUser.$edit">Name : {{currentUser.name}}</span>
-<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.name"/></div>
+  <p ng-if="!currentUser.$edit">Prénom : {{currentUser.surname}}</p>
 
-<span ng-if="!currentUser.$edit">Surname : {{currentUser.surname}}</span>
-<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.surname"/></div>
+  <p ng-if="!currentUser.$edit">Email : {{currentUser.email}}</p>
 
-<span ng-if="!currentUser.$edit">Email : {{currentUser.email}}</span>
-<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.email"/></div>
-
-<span ng-if="!currentUser.$edit">Website : {{currentUser.website}}</span>
-<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.website"/></div>
-
+  <p ng-if="!currentUser.$edit">Website : {{currentUser.website}}</p>
+  <div id="broken"></div>
+</div>
 </br>
 
-<p>Projets participés :</p>
-<ul>
-  <li ng-repeat="info in projectUser">Projet : {{info}} role : </li>
-</ul>
+<h3>Projets</h3>
 
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Description</th>
+      <th>Rôle</th>
+      <th>Année</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="project in projectUser">
+      <td>{{project.title}}</td>
+      <td>{{project.description}}</td>
+      <td>{{projectUser.getRole(currentUser.id,project.id)}}</td>
+      <td>{{project.year}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 
-
-<a ng-if="!currentUser.$edit" href="" class="btn btn-default btn-xs" ng-click="currentUser.$edit = true">Modifier</a>
-<a ng-if="currentUser.$edit" href="" class="btn btn-primary btn-xs" ng-click="currentUser.$edit = false;updateUser(currentUser.id,currentUser.name,currentUser.surname)">Sauvegarder</a>
-<a class="btn btn-default btn-xs" ng-click="deleteUser(x.id)">Supprimer</a>
-<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalRole">Ajouter rôle</a>
-<a ng-click="goToUser(x.id);" class="btn btn-default btn-xs">Plus d'infos</a>
+<a ng-click="goToAccueil()" href="" class="btn btn-success btn-md"><span class="glyphicon glyphicon-home"></span> Revenir à l'accueil</a>
 
 
 </body>

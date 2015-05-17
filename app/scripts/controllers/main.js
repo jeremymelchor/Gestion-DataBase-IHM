@@ -14,6 +14,9 @@ angular.module('test2IhmApp')
 
     /******************** Récupération des données *******************/
 
+    /**
+     * Récupère tout les Utilisateurs
+     */
     $http.get("http://poo-ihm-2015-rest.herokuapp.com/api/Users")
       .success(function (data) {
         $scope.data = data.data;
@@ -23,10 +26,16 @@ angular.module('test2IhmApp')
         "<strong>ERREUR !</strong> Le serveur est peut être down, réessayez plus tard</div>";
       });
 
+    /**
+     * Récupère tout les Projets
+     */
     $http.get("http://poo-ihm-2015-rest.herokuapp.com/api/Projects")
       .success(function (data) {
         $scope.projects = data.data;
       });
+
+
+
 
 
 
@@ -78,15 +87,28 @@ angular.module('test2IhmApp')
 
 
 
+
+
+
     /****************** Actions sur les Projets ******************/
 
+
+    /**
+     * Met à jour un projet
+     *
+     * @param id  L'id du projet
+     * @param title Le titre du projet
+     * @param description La description du projet
+     * @param year L'année du projet
+     */
     $scope.updateProject = function (id, title, description, year) {
       var project = {};
       project.title = title;
       project.description = description;
       project.year = year;
-      $http.put("http://poo-ihm-2015-rest.herokuapp.com/api/Project/" + id, project);
+      $http.put("http://poo-ihm-2015-rest.herokuapp.com/api/Projects/" + id, project);
     };
+
 
     /**
      * Crée un projet
@@ -103,6 +125,7 @@ angular.module('test2IhmApp')
       $http.post("http://poo-ihm-2015-rest.herokuapp.com/api/Projects", project);
     };
 
+
     /**
      * Supprime un projet
      *
@@ -114,13 +137,30 @@ angular.module('test2IhmApp')
     };
 
 
+
+
+
     /********************* Méthodes pour ajouter une personne à un projet ainsi que son rôle ************/
 
+    /**
+     * Récupère l'id d'un objet utilisateur
+     *
+     * @param user L'objet user dont il faut récupérer l'id
+     * @param projectId L'id du projet
+     */
     $scope.getIdOfUser = function(user,projectId) {
       $scope.idOfUser = user.id;
       $scope.getUserInfo($scope.idOfUser,projectId)
     };
 
+
+    /**
+     * Récupère toute les informations d'un utilisateur à partir
+     * de son id et appelle addUserToProject()
+     *
+     * @param userId L'id de l'utilisateur
+     * @param projectId L'id du projet
+     */
     $scope.getUserInfo = function(userId,projectId) {
       $http.get("http://poo-ihm-2015-rest.herokuapp.com/api/Users/" + userId)
         .success(function (data) {
@@ -134,6 +174,14 @@ angular.module('test2IhmApp')
         });
     };
 
+
+    /**
+     * Ajoute un utilisateur à un projet
+     *
+     * @param user L'objet utilisateur
+     * @param userId L'id de l'utilisateur
+     * @param projectId L'id du projet
+     */
     $scope.addUserToProject = function(user,userId,projectId) {
       $http.put("http://poo-ihm-2015-rest.herokuapp.com/api/Projects/"+projectId+"/Users/"+userId, user);
     };
@@ -145,6 +193,8 @@ angular.module('test2IhmApp')
       roleTemp.ProjectId = projectId;
       $http.post("http://poo-ihm-2015-rest.herokuapp.com/api/Roles/", roleTemp);
     };
+
+
 
 
 
@@ -213,11 +263,21 @@ angular.module('test2IhmApp')
 
 
 
+
     /****************** Méthodes utiles ******************/
 
     $scope.clearModal = function () {
       document.getElementById("userOfProject").innerHTML = "";
     };
+
+    $scope.updateVariableId = function(id) {
+      $scope.projectId = id;
+    };
+
+
+
+
+    /****************** Méthodes de rootage ******************/
 
     $scope.goToUser = function (id) {
       $location.path('/moreInfo/'+id);
@@ -226,10 +286,5 @@ angular.module('test2IhmApp')
     $scope.goToAddUserWithRole = function(id) {
       $location.path('/userAndRole/'+id);
     };
-
-    $scope.updateVariableId = function(id) {
-      $scope.projectId = id;
-    };
-
   });
 

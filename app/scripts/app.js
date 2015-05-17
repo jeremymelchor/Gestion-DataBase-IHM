@@ -23,10 +23,6 @@ angular
         templateUrl: 'views/moreInfo.html',
         controller: 'MoreInfoCTRL'
       })
-      .when('/userAndRole/:projectId', {
-        templateUrl: 'views/userAndRole.html',
-        controller: 'UserAndRoleCTRL'
-      })
       .otherwise({
         redirectTo: '/'
       });

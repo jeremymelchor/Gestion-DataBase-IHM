@@ -14,7 +14,7 @@
   <ul class="nav nav-pills">
     <li><a data-toggle="pill" href="#affichage">Affichage des utilisateurs</a></li>
     <li><a data-toggle="pill" href="#ajouterUser">Ajouter un utilisateur</a></li>
-    <li><a data-toggle="pill" href="#affichageProjet">Projets</a></li>
+    <li><a data-toggle="pill" href="#affichageProjet">Affichage des projets</a></li>
     <li><a data-toggle="pill" href="#ajouterProjet">Ajouter un projet</a></li>
   </ul>
 
@@ -46,57 +46,40 @@
 
           <td data-title="'Name'" width="150">
             <span ng-if="!x.$edit">{{x.name}}</span>
+
             <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.name"/></div>
           </td>
 
           <td data-title="'Surname'" width="200">
             <span ng-if="!x.$edit">{{x.surname}}</span>
+
             <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.surname"/></div>
           </td>
 
           <td data-title="'email'" width="200">
             <span ng-if="!x.$edit">{{x.email}}</span>
+
             <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.email"/></div>
           </td>
 
           <td data-title='website'>
             <span ng-if="!x.$edit">{{x.website}}</span>
+
             <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.website"/></div>
           </td>
 
-          <td data-title='Actions'>
-            <a ng-if="!x.$edit" href="" class="btn btn-default btn-xs" ng-click="x.$edit = true">Modifier</a>
-
+          <td data-title='Actions' width="70">
+            <a ng-if="!x.$edit" href="" ng-click="x.$edit = true"><span class="glyphicon glyphicon-edit"></span></a>
             <a ng-if="x.$edit" href="" class="btn btn-primary btn-xs"
                ng-click="x.$edit = false;updateUser(x.id,x.name,x.surname,x.email,x.website)">Sauvegarder</a>
 
-            <a class="btn btn-default btn-xs" ng-click="deleteUser(x.id)">Supprimer</a>
-            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalRole">Ajouter rôle</a>
-            <a ng-click="goToUser(x.id);" class="btn btn-default btn-xs">Plus d'infos</a>
+            <a ng-click="deleteUser(x.id)"><span class="glyphicon glyphicon-trash"></span></a>
+            <a ng-click="goToUser(x.id);"><span
+              class="glyphicon glyphicon-info-sign	"></span></a>
           </td>
 
         </tr>
       </table>
-
-<!--
-      <div class="modal fade" id="modalRole" role="dialog">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Ajout d'un rôle</h4>
-            </div>
-            <div class="modal-body">
-              <input class="form-control" ng-model="name" type="text" placeholder="Entrez le nom du rôle" autofocus>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="">
-                Sauvegarder
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>-->
 
     </div>
 
@@ -133,6 +116,7 @@
             <label for="email">Email:</label>
             <input name="mail" ng-model="newMail" type="email" class="form-control" id="email"
                    placeholder="Entrez l'email" required>
+
             <p ng-show="userForm.mail.$invalid && !userForm.mail.$pristine" class="help-block">Entrez une adresse email
               valide</p>
           </div>
@@ -155,6 +139,8 @@
 
 
 
+
+
     <!--------------------- Pills d'Affichage des projets --------------------->
 
     <div id="affichageProjet" class="tab-pane fade">
@@ -171,6 +157,7 @@
 
           <td data-title='Title' width="130">
             <span ng-if="!project.$edit">{{project.title}}</span>
+
             <div ng-if="project.$edit">
               <input class="form-control" type="text" ng-model="project.title"/>
             </div>
@@ -178,6 +165,7 @@
 
           <td data-title='Description' width="300">
             <span ng-if="!project.$edit">{{project.description}}</span>
+
             <div ng-if="project.$edit">
               <input class="form-control" type="text" ng-model="project.description"/>
             </div>
@@ -185,25 +173,26 @@
 
           <td data-title='Year' width="100">
             <span ng-if="!project.$edit">{{project.year}}</span>
+
             <div ng-if="project.$edit">
               <input class="form-control" type="text" ng-model="project.year"/>
             </div>
           </td>
 
-          <td data-title="'Actions'">
-            <a ng-if="!project.$edit" href="" class="btn btn-default btn-xs"
-               ng-click="project.$edit = true">Modifier</a>
+          <td data-title='Actions' width="80">
+            <a ng-if="!project.$edit" href="" ng-click="project.$edit = true"><span
+              class="glyphicon glyphicon-edit"></span></a>
 
             <a ng-if="project.$edit" href="" class="btn btn-primary btn-xs"
                ng-click="project.$edit = false;updateProject(project.id,project.title,project.description,project.year)">Sauvegarder</a>
 
-            <a class="btn btn-default btn-xs" ng-click="deleteProject(project.id)">Supprimer</a>
+            <a ng-click="deleteProject(project.id)"><span class="glyphicon glyphicon-trash"></span></a>
 
-            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalUserOfProject"
-               ng-click="getUserAndRole(project.id);clearModal();">Users</a>
+            <a data-toggle="modal" data-target="#modalUserOfProject"
+               ng-click="getUserAndRole(project.id);clearModal();"><span class="glyphicon glyphicon-th-list"></span></a>
 
-            <a class="btn btn-default btn-xs" ng-click="updateVariableId(project.id)" data-toggle="modal" data-target="#modalAddUserAndRole"
-              >Ajouter User & role</a>
+            <a ng-click="updateVariableId(project.id)" data-toggle="modal" data-target="#modalAddUserAndRole"
+              ><span class="glyphicon glyphicon-plus-sign"></span></a>
           </td>
 
         </tr>
@@ -223,7 +212,7 @@
               <p id="userOfProject"></p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">
                 Fermer
               </button>
             </div>
@@ -240,16 +229,20 @@
 
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Liste des Utilisateurs sur le projet</h4>
+              <h4 class="modal-title">Ajouter un utilisateur à un projet avec son rôle associé</h4>
             </div>
 
             <div class="modal-body">
+              <p>Veuillez choisir la personne à ajouter au projet</p>
               <select ng-options="user.name for user in data" ng-model="selectedItem"></select>
-              <input type="text" class="form-control" ng-model="role" placeholder="Entrez la description du rôle"/>
+
+              <p>Veuillez entrer son rôle</p>
+              <input required type="text" class="form-control" ng-model="role"
+                     placeholder="Entrez la description du rôle"/>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal"
+              <button type="button" class="btn btn-primary" data-dismiss="modal"
                       ng-click="getIdOfUser(selectedItem,projectId);addRole(selectedItem.id,projectId,role)">
                 Sauvegarder
               </button>
@@ -262,6 +255,9 @@
     </div>
 
 
+
+    
+
     <!---------------------------------------------- Pills d'ajout de projet -------------------------------------------------->
 
     <div id="ajouterProjet" class="tab-pane fade">
@@ -271,7 +267,8 @@
 
         <form name="projectForm" role="form">
 
-          <div class="form-group" ng-class="{ 'has-error' : projectForm.projectTitle.$invalid && !projectForm.projectTitle.$pristine }">
+          <div class="form-group"
+               ng-class="{ 'has-error' : projectForm.projectTitle.$invalid && !projectForm.projectTitle.$pristine }">
             <label for="projectTitle">Titre :</label>
             <input name="projectTitle" ng-model="newTitle" type="text" class="form-control" id="projectTitle"
                    placeholder="Entrez le titre du projet"
