@@ -1,0 +1,35 @@
+<html ng-app='test2IhmApp'>
+<body ng-controller='MoreInfoCTRL'>
+
+
+
+<span ng-if="!currentUser.$edit">Name : {{currentUser.name}}</span>
+<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.name"/></div>
+
+<span ng-if="!currentUser.$edit">Surname : {{currentUser.surname}}</span>
+<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.surname"/></div>
+
+<span ng-if="!currentUser.$edit">Email : {{currentUser.email}}</span>
+<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.email"/></div>
+
+<span ng-if="!currentUser.$edit">Website : {{currentUser.website}}</span>
+<div ng-if="currentUser.$edit"><input class="form-control" type="text" ng-model="currentUser.website"/></div>
+
+</br>
+
+<p>Projets participés :</p>
+<ul>
+  <li ng-repeat="info in projectUser">Projet : {{info}} role : </li>
+</ul>
+
+
+
+<a ng-if="!currentUser.$edit" href="" class="btn btn-default btn-xs" ng-click="currentUser.$edit = true">Modifier</a>
+<a ng-if="currentUser.$edit" href="" class="btn btn-primary btn-xs" ng-click="currentUser.$edit = false;updateUser(currentUser.id,currentUser.name,currentUser.surname)">Sauvegarder</a>
+<a class="btn btn-default btn-xs" ng-click="deleteUser(x.id)">Supprimer</a>
+<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalRole">Ajouter rôle</a>
+<a ng-click="goToUser(x.id);" class="btn btn-default btn-xs">Plus d'infos</a>
+
+
+</body>
+</html>

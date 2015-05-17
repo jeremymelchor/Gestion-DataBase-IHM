@@ -1,0 +1,309 @@
+<div class="jumbotron">
+  <h2>Barre de recherche</h2>
+  <input class="form-control" ng-model="searchName" type="text" placeholder="Chercher dans la liste des Utilisateurs"
+         autofocus>
+  </br>
+  <input class="form-control" ng-model="searchTitle" type="text" placeholder="Chercher dans la liste des Projets"
+         autofocus>
+</div>
+
+
+<!----------------------------------- Pills de navigation ------------------------------>
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li><a data-toggle="pill" href="#affichage">Affichage des utilisateurs</a></li>
+    <li><a data-toggle="pill" href="#ajouterUser">Ajouter un utilisateur</a></li>
+    <li><a data-toggle="pill" href="#affichageProjet">Projets</a></li>
+    <li><a data-toggle="pill" href="#ajouterProjet">Ajouter un projet</a></li>
+  </ul>
+
+  </br>
+
+  <!-- Div affichant un message d'erreur si la base de données n'est pas accessible -->
+  <div id="broken"></div>
+
+  <!-- Affichage du contenu des pills de navigation -->
+
+  <div class="tab-content">
+
+
+    <!--------------------- Pills d'affichage des utilisateurs --------------------->
+
+    <div id="affichage" class="tab-pane fade in active">
+
+      <table class="table">
+
+        <tr>
+          <td><span>Prénom</span></td>
+          <td><span>Nom</span></td>
+          <td><span>Email</span></td>
+          <td><span>Website</span></td>
+          <td><span>Actions</span></td>
+        </tr>
+
+        <tr ng-repeat="x in data | filter:searchName">
+
+          <td data-title="'Name'" width="150">
+            <span ng-if="!x.$edit">{{x.name}}</span>
+            <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.name"/></div>
+          </td>
+
+          <td data-title="'Surname'" width="200">
+            <span ng-if="!x.$edit">{{x.surname}}</span>
+            <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.surname"/></div>
+          </td>
+
+          <td data-title="'email'" width="200">
+            <span ng-if="!x.$edit">{{x.email}}</span>
+            <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.email"/></div>
+          </td>
+
+          <td data-title='website'>
+            <span ng-if="!x.$edit">{{x.website}}</span>
+            <div ng-if="x.$edit"><input class="form-control" type="text" ng-model="x.website"/></div>
+          </td>
+
+          <td data-title='Actions'>
+            <a ng-if="!x.$edit" href="" class="btn btn-default btn-xs" ng-click="x.$edit = true">Modifier</a>
+
+            <a ng-if="x.$edit" href="" class="btn btn-primary btn-xs"
+               ng-click="x.$edit = false;updateUser(x.id,x.name,x.surname,x.email,x.website)">Sauvegarder</a>
+
+            <a class="btn btn-default btn-xs" ng-click="deleteUser(x.id)">Supprimer</a>
+            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalRole">Ajouter rôle</a>
+            <a ng-click="goToUser(x.id);" class="btn btn-default btn-xs">Plus d'infos</a>
+          </td>
+
+        </tr>
+      </table>
+
+<!--
+      <div class="modal fade" id="modalRole" role="dialog">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Ajout d'un rôle</h4>
+            </div>
+            <div class="modal-body">
+              <input class="form-control" ng-model="name" type="text" placeholder="Entrez le nom du rôle" autofocus>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="">
+                Sauvegarder
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+    </div>
+
+
+
+
+
+    <!--------------------- Pills d'ajout d'utilisateur --------------------->
+
+    <div id="ajouterUser" class="tab-pane fade">
+      <div class="container">
+
+        <h2>Ajouter un utilisateur</h2>
+
+        <form name="userForm" role="form">
+
+          <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
+            <label for="name">Nom :</label>
+            <input name="name" ng-model="newName" type="text" class="form-control" id="name" placeholder="Entrez le nom"
+                   required ng-minlength="1" ng-maxlength="20">
+
+            <p ng-show="userForm.name.$error.maxlength" class="help-block">Le nom est trop long</p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-error' : userForm.surname.$invalid && !userForm.surname.$pristine }">
+            <label for="surname">Prénom :</label>
+            <input name="surname" ng-model="newSurname" type="text" class="form-control" id="surname"
+                   placeholder="Entrez le prénom" required ng-minlength="1" ng-maxlength="20">
+
+            <p ng-show="userForm.surname.$error.maxlength" class="help-block">Le prénom est trop long</p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-error' : userForm.mail.$invalid && !userForm.mail.$pristine }">
+            <label for="email">Email:</label>
+            <input name="mail" ng-model="newMail" type="email" class="form-control" id="email"
+                   placeholder="Entrez l'email" required>
+            <p ng-show="userForm.mail.$invalid && !userForm.mail.$pristine" class="help-block">Entrez une adresse email
+              valide</p>
+          </div>
+
+          <div class="form-group">
+            <label for="website">Website :</label>
+            <input ng-model="newWebsite" type="text" class="form-control" id="website" placeholder="Entrez le site web">
+          </div>
+
+          <button type="submit" ng-disabled="userForm.$invalid"
+                  ng-click="createUser(newName,newSurname,newMail,newWebsite);" class="btn btn-default">
+            Ajouter
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    <!--------------------- Pills d'Affichage des projets --------------------->
+
+    <div id="affichageProjet" class="tab-pane fade">
+      <table class="table">
+
+        <tr>
+          <td><span>Titre</span></td>
+          <td><span>Description</span></td>
+          <td><span>Année</span></td>
+          <td><span>Actions</span></td>
+        </tr>
+
+        <tr ng-repeat="project in projects | filter:searchTitle">
+
+          <td data-title='Title' width="130">
+            <span ng-if="!project.$edit">{{project.title}}</span>
+            <div ng-if="project.$edit">
+              <input class="form-control" type="text" ng-model="project.title"/>
+            </div>
+          </td>
+
+          <td data-title='Description' width="300">
+            <span ng-if="!project.$edit">{{project.description}}</span>
+            <div ng-if="project.$edit">
+              <input class="form-control" type="text" ng-model="project.description"/>
+            </div>
+          </td>
+
+          <td data-title='Year' width="100">
+            <span ng-if="!project.$edit">{{project.year}}</span>
+            <div ng-if="project.$edit">
+              <input class="form-control" type="text" ng-model="project.year"/>
+            </div>
+          </td>
+
+          <td data-title="'Actions'">
+            <a ng-if="!project.$edit" href="" class="btn btn-default btn-xs"
+               ng-click="project.$edit = true">Modifier</a>
+
+            <a ng-if="project.$edit" href="" class="btn btn-primary btn-xs"
+               ng-click="project.$edit = false;updateProject(project.id,project.title,project.description,project.year)">Sauvegarder</a>
+
+            <a class="btn btn-default btn-xs" ng-click="deleteProject(project.id)">Supprimer</a>
+
+            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalUserOfProject"
+               ng-click="getUserAndRole(project.id);clearModal();">Users</a>
+
+            <a class="btn btn-default btn-xs" ng-click="updateVariableId(project.id)" data-toggle="modal" data-target="#modalAddUserAndRole"
+              >Ajouter User & role</a>
+          </td>
+
+        </tr>
+      </table>
+
+
+      <!-- Modal affichant les utilisateurs d'un projet avec leur rôle -->
+
+      <div class="modal fade" id="modalUserOfProject" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Liste des Utilisateurs sur le projet</h4>
+            </div>
+            <div class="modal-body">
+              <p id="userOfProject"></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Modal ajoutant un utilisateur à un projet avec son rôle -->
+
+      <div class="modal fade" id="modalAddUserAndRole" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Liste des Utilisateurs sur le projet</h4>
+            </div>
+
+            <div class="modal-body">
+              <select ng-options="user.name for user in data" ng-model="selectedItem"></select>
+              <input type="text" class="form-control" ng-model="role" placeholder="Entrez la description du rôle"/>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal"
+                      ng-click="getIdOfUser(selectedItem,projectId);addRole(selectedItem.id,projectId,role)">
+                Sauvegarder
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <!---------------------------------------------- Pills d'ajout de projet -------------------------------------------------->
+
+    <div id="ajouterProjet" class="tab-pane fade">
+      <div class="container">
+
+        <h2>Ajouter un Projet</h2>
+
+        <form name="projectForm" role="form">
+
+          <div class="form-group" ng-class="{ 'has-error' : projectForm.projectTitle.$invalid && !projectForm.projectTitle.$pristine }">
+            <label for="projectTitle">Titre :</label>
+            <input name="projectTitle" ng-model="newTitle" type="text" class="form-control" id="projectTitle"
+                   placeholder="Entrez le titre du projet"
+                   required ng-maxlength="30">
+
+            <p ng-show="projectForm.projectTitle.$error.maxlength" class="help-block">Le titre est trop long</p>
+          </div>
+
+          <div class="form-group"
+               ng-class="{ 'has-error' : projectForm.description.$invalid && !projectForm.description.$pristine }">
+            <label for="description">Description :</label>
+            <input name="description" ng-model="newDescription" type="text" class="form-control" id="description"
+                   placeholder="Entrez la description du projet" required ng-minlength="1">
+
+            <p ng-show="projectForm.description.$error.minlength" class="help-block">La description est trop courte</p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-error' : projectForm.year.$invalid && !projectForm.year.$pristine }">
+            <label for="year">Année :</label>
+            <input name="year" ng-model="newYear" type="number" class="form-control" id="year"
+                   placeholder="Entrez l'année du projet" required>
+          </div>
+
+          <button type="submit" ng-disabled="projectForm.$invalid"
+                  ng-click="createProject(newTitle,newDescription,newYear);" class="btn btn-default">
+            Ajouter
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+</div>
