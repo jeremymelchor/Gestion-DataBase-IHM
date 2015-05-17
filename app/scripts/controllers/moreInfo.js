@@ -85,6 +85,7 @@ angular.module('test2IhmApp')
     }
 
 
+    
 
 
     /************ Méthode de rootage *****************/
